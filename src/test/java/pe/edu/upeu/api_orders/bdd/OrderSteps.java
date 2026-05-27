@@ -16,14 +16,15 @@ public class OrderSteps {
 
     @Given("the order API is up")
     public void the_order_api_is_up() {
-        // Aquí podrías verificar si el servidor responde.
+        // La API se levanta automáticamente con SpringBootTest.
     }
 
     @When("I send a POST request to {string} with customer {string} and amount {double}")
     public void i_send_a_post_request(String path, String customer, Double amount) {
         Order order = new Order(null, customer, amount);
+
         response = restTemplate.postForEntity(
-                "http://localhost:8080" + path,
+                "http://localhost:8085" + path,
                 order,
                 Order.class
         );
