@@ -17,7 +17,7 @@ pipeline {
                         sh 'chmod +x mvnw'
                         sh './mvnw clean verify'
                     } else {
-                        bat 'mvnw.cmd clean verify'
+                        bat '.\\mvnw.cmd clean verify'
                     }
                 }
             }
@@ -27,11 +27,11 @@ pipeline {
             steps {
                 echo 'Enviando métricas a SonarQube...'
                 script {
-                    withSonarQubeEnv('SonarQube') {
+                    withSonarQubeEnv('sonarqube') {
                         if (isUnix()) {
                             sh './mvnw sonar:sonar -Dsonar.projectKey=api-orders -Dsonar.projectName=api-orders -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml'
                         } else {
-                            bat 'mvnw.cmd sonar:sonar -Dsonar.projectKey=api-orders -Dsonar.projectName=api-orders -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml'
+                            bat '.\\mvnw.cmd sonar:sonar -Dsonar.projectKey=api-orders -Dsonar.projectName=api-orders -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml'
                         }
                     }
                 }
