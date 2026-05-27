@@ -11,7 +11,7 @@ pipeline {
 
         stage('Build & Test') {
             steps {
-                echo 'Compilando proyecto, ejecutando pruebas y generando JaCoCo...'
+                echo 'Compilando proyecto, ejecutando pruebas y generando reporte JaCoCo...'
                 script {
                     if (isUnix()) {
                         sh 'chmod +x mvnw'
@@ -25,13 +25,13 @@ pipeline {
 
         stage('SonarQube Analysis') {
             steps {
-                echo 'Enviando análisis a SonarQube...'
+                echo 'Enviando métricas a SonarQube...'
                 script {
                     withSonarQubeEnv('SonarQube') {
                         if (isUnix()) {
-                            sh './mvnw sonar:sonar -Dsonar.projectKey=api-orders -Dsonar.projectName=api-orders'
+                            sh './mvnw sonar:sonar -Dsonar.projectKey=api-orders -Dsonar.projectName=api-orders -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml'
                         } else {
-                            bat 'mvnw.cmd sonar:sonar -Dsonar.projectKey=api-orders -Dsonar.projectName=api-orders'
+                            bat 'mvnw.cmd sonar:sonar -Dsonar.projectKey=api-orders -Dsonar.projectName=api-orders -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml'
                         }
                     }
                 }
@@ -58,7 +58,7 @@ pipeline {
 
     post {
         success {
-            echo 'Pipeline ejecutado correctamente: Build, Test, SonarQube y Docker OK.'
+            echo 'Pipeline finalizado correctamente: Build, Test, SonarQube y Docker OK.'
         }
 
         failure {
